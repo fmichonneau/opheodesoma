@@ -1,0 +1,47 @@
+packages:
+  - dplyr
+  - magrittr
+  - chopper
+  - pegas
+
+sources:
+  - R/
+
+targets:
+  all:
+    depends:
+      - trimmed_alignments
+
+  opheodesoma_euapta_data:
+    command: load_csv("data/opheodesoma_euapta_data.csv")
+
+  list_euapta_extractions:
+    command: euapta_extractions(opheodesoma_euapta_data)
+
+  list_opheodesoma_extractions:
+    command: opheodesoma_extractions(opheodesoma_euapta_data)
+
+  euapta_all_loci_alg:
+    command: get_all_loci(list_euapta_extractions, genus=I("euapta"))
+
+  opheodesoma_all_loci_alg:
+    command: get_all_loci(list_opheodesoma_extractions, genus=I("opheodesoma"))
+
+  euapta_no_empty_seqs:
+    command: make_no_empty_sequences(euapta_all_loci_alg)
+
+  opheodesoma_no_empty_seqs:
+    command: make_no_empty_sequences(opheodesoma_all_loci_alg)
+
+  trimmed_alignments:
+    command: make_trim_alignment()
+    depends:
+      - opheodesoma_no_empty_seqs
+      - euapta_no_empty_seqs
+
+  networks:
+    command: all_networks()
+    depends:
+      - trimmed_alignments
+
+  ## haplotype networks --------------------------------------------------------
