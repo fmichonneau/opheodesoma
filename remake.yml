@@ -39,9 +39,12 @@ targets:
       - opheodesoma_no_empty_seqs
       - euapta_no_empty_seqs
 
+  ## haplotype networks --------------------------------------------------------
   networks:
     command: all_networks()
     depends:
       - trimmed_alignments
 
-  ## haplotype networks --------------------------------------------------------
+  ## RAxML trees ---------------------------------------------------------------
+  raxml_trees:
+    command: make_raxml_trees()
